@@ -1,3 +1,12 @@
+README for WSN-Game Project
+
+This project is for West Chester University of PA under the guidance of Dr. Agah
+
+Our goal is to write a program on the micaz platform to negotiate networking strategies using game theory, to optimize the lifetime of the network.
+
+Authors:
+Dave Drager
+
 README for AntiTheft
 Author/Contact: tinyos-help@millennium.berkeley.edu
 
