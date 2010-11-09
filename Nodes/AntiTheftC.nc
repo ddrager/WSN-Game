@@ -123,6 +123,8 @@ event void ReadVoltage.readDone( error_t result, uint16_t val ){
   event message_t *TheftReceive.receive(message_t* msg, void* payload, uint8_t len) {
 
 	// whoops - this is the raw message. it is not in a nice readable packet. 
+	// this area needs to be cleaned up. With event message_t we are receiving the raw packet, we need to read the
+	// data is clearer terms, for example the alertId is the source node. Need to extract this from packet. 
 
     	//settingsLed(); /* we will leave this on so that we can tell when the nodes are sending/receiving messages */
 
@@ -140,8 +142,6 @@ event void ReadVoltage.readDone( error_t result, uint16_t val ){
 
     		//} 
 	
-
-    	/* otherwise, pass it along and push the path entries */
 	
     	//else {
 	//	return msg;
