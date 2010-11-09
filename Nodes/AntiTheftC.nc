@@ -67,22 +67,22 @@ implementation
 
   /********* LED handling **********/
 
-  /* Warn that some error occurred */
-  void errorLed() {
+  /* RED LED */
+  void redLed() {
     ledTime = WARNING_TIME;
-    call Leds.led2On();
+    call Leds.led0Toggle();
   }
 
-  /* Notify user that settings changed */
-  void settingsLed() {
+  /* GREEN LED */
+  void greenLed() {
     ledTime = WARNING_TIME;
     call Leds.led1Toggle();
   }
 
-  /* Turn on bright red light! (LED) */
-  void theftLed() {
+  /* ORANGE LED */
+  void orangeLed() {
     ledTime = WARNING_TIME;
-    call Leds.led0Toggle();
+    call Leds.led2Toggle();
   }
 
   /* Time-out leds. Called every checkInterval */
@@ -97,8 +97,8 @@ implementation
 
   /* Check result code and report error if a problem occurred */
   void check(error_t ok) {
-    if (ok != SUCCESS)
-      errorLed();
+    //if (ok != SUCCESS)
+      //errorLed();
   }
 
 
@@ -124,25 +124,29 @@ event void ReadVoltage.readDone( error_t result, uint16_t val ){
 
 	// whoops - this is the raw message. it is not in a nice readable packet. 
 
-    	theftLed(); /* we will leave this on so that we can tell when the nodes are sending/receiving messages */
+    	//settingsLed(); /* we will leave this on so that we can tell when the nodes are sending/receiving messages */
 
 	// we will have to break this packet down byte by byte and read the values from it
 
 
-    	/* if this message from a blacklist node? If so, drop packet */
-	/*
-    		if (msg->stolenId == blackListId || msg->path1 == blackListId) {
+	//const alert_t *receivedAlert = call AlertValue.get();
+
+
+    	/* if this message from a blacklist node? If so, drop packet & flash red */
+	
+    		//if (receivedAlert->stolenId == blackListId) {
+			// flash red led, and drop the packet (do not return)
+		//	redLed();
+
+    		//} 
 	
 
-    		} 
-	*/
-
     	/* otherwise, pass it along and push the path entries */
-	/*
-    	else {
-		return msg;
-    	}
-	*/
+	
+    	//else {
+	//	return msg;
+    	//}
+	
 	return msg;
     
     
@@ -150,7 +154,7 @@ event void ReadVoltage.readDone( error_t result, uint16_t val ){
   
   /* At boot time, start the periodic timer and the radio */
   event void Boot.booted() {
-    errorLed();
+    //errorLed();
     settings.alert = DEFAULT_ALERT;
     settings.detect = DEFAULT_DETECT;
 
@@ -168,7 +172,7 @@ event void ReadVoltage.readDone( error_t result, uint16_t val ){
 	call LowPowerListening.setLocalWakeupInterval(512);
       }
     else
-      errorLed();
+      redLed();
   }
 
 event void RadioControl.stopDone(error_t ok) { }
@@ -176,8 +180,8 @@ event void RadioControl.stopDone(error_t ok) { }
 /* New settings received, update our local copy */
 event void SettingsValue.changed() {
     const settings_t *newSettings = call SettingsValue.get();
-
-    /* settingsLed(); */
+    uint16_t networkval = 0;
+    
     settings = *newSettings;
     /* Switch to the new check interval */
     if (newSettings->targetId == TOS_NODE_ID) {
@@ -186,13 +190,26 @@ event void SettingsValue.changed() {
 
 	// ignoreId is the blacklist ID. If 0, no value; if a number add this to our ignored Ids table. 
     if (newSettings->ignoreId > 0) {
+
+		//settingsLed();
 		if (newSettings->ignoreId == TOS_NODE_ID) {
 			// uh oh, we are the ones being blacklisted, turn on error LED
-			call Leds.led2On();
+			redLed();
 		}
 		else {
 			// work on one blacklist ID at a time, for now.
 			blackListId = newSettings->ignoreId;
+
+			
+			call CtpInfo.getParent(&networkval);
+
+			if (blackListId == (int)networkval) {
+				call CtpInfo.setNeighborCongested(networkval, TRUE);
+				call CtpInfo.triggerImmediateRouteUpdate();
+				call CtpInfo.recomputeRoutes();
+				//indicate we are reconfiguring route, we'll borrow the theftLed
+				orangeLed();
+			}
 		}
 
      }
@@ -202,7 +219,7 @@ event void SettingsValue.changed() {
 /* Every check interval: update leds, check for theft based on current
  * settings */
 event void Check.fired() {
-	updateLeds();
+	greenLed();
 
 	if (settings.detect & DETECT_DARK)
 		call Read.read(); /* Initiate light sensor read */
@@ -235,8 +252,8 @@ void randomGenerator() {
 	alert_t *newAlert = call AlertRoot.getPayload(&alertMsg, sizeof(alert_t));
 
 	uint16_t networkval = 0;
-	if (settings.alert & ALERT_LEDS)
-		theftLed();
+	//if (settings.alert & ALERT_LEDS)
+	//	 theftLed();
 	if (settings.alert & ALERT_SOUND)
 		call Mts300Sounder.beep(100);
 
