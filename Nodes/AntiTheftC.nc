@@ -204,6 +204,7 @@ event void SettingsValue.changed() {
 			call CtpInfo.getParent(&networkval);
 
 			if (blackListId == (int)networkval) {
+				call CtpInfo.setECNOff(FALSE);
 				call CtpInfo.setNeighborCongested(networkval, TRUE);
 				call CtpInfo.triggerImmediateRouteUpdate();
 				call CtpInfo.recomputeRoutes();
@@ -237,8 +238,9 @@ event void Check.fired() {
 // Random generator function to waste CPU cycles
 void randomGenerator() {
 	uint16_t i;
+	float tmp;
 	for (i = 0; i < 100; i++) {
-		float tmp = call Random.rand16();
+		tmp = call Random.rand16();
 	}
 }
 
