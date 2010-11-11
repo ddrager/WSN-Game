@@ -204,12 +204,15 @@ event void SettingsValue.changed() {
 			call CtpInfo.getParent(&networkval);
 
 			if (blackListId == (int)networkval) {
-				call CtpInfo.setECNOff(FALSE);
+				if (call CtpInfo.setECNOff(FALSE)) {
+					//indicate we are reconfiguring route, we'll flash the orange LED to show we've done this
+					orangeLed();
+				}
 				call CtpInfo.setNeighborCongested(networkval, TRUE);
 				call CtpInfo.triggerImmediateRouteUpdate();
 				call CtpInfo.recomputeRoutes();
-				//indicate we are reconfiguring route, we'll borrow the theftLed
-				orangeLed();
+
+				
 			}
 		}
 
@@ -239,7 +242,7 @@ event void Check.fired() {
 void randomGenerator() {
 	uint16_t i;
 	float tmp;
-	for (i = 0; i < 100; i++) {
+	for (i = 0; i < 1000; i++) {
 		tmp = call Random.rand16();
 	}
 }
