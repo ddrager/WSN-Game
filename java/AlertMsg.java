@@ -7,7 +7,7 @@
 public class AlertMsg extends net.tinyos.message.Message {
 
     /** The default size of this message type in bytes. */
-    public static final int DEFAULT_MESSAGE_SIZE = 23;
+    public static final int DEFAULT_MESSAGE_SIZE = 18;
 
     /** The Active Message type associated with this message. */
     public static final int AM_TYPE = 22;
@@ -85,7 +85,7 @@ public class AlertMsg extends net.tinyos.message.Message {
     public String toString() {
       String s = "Message <AlertMsg> \n";
       try {
-        s += "  [sourceId=0x"+Long.toHexString(get_stolenId())+"]\n";
+        s += "  [sourceId=0x"+Long.toHexString(get_sourceId())+"]\n";
       } catch (ArrayIndexOutOfBoundsException aioobe) { /* Skip field */ }
       try {
         s += "  [voltageData=0x"+Long.toHexString(get_voltageData())+"]\n";
@@ -126,56 +126,56 @@ public class AlertMsg extends net.tinyos.message.Message {
     /**
      * Return whether the field 'stolenId' is signed (false).
      */
-    public static boolean isSigned_stolenId() {
+    public static boolean isSigned_sourceId() {
         return false;
     }
 
     /**
      * Return whether the field 'stolenId' is an array (false).
      */
-    public static boolean isArray_stolenId() {
+    public static boolean isArray_sourceId() {
         return false;
     }
 
     /**
      * Return the offset (in bytes) of the field 'stolenId'
      */
-    public static int offset_stolenId() {
+    public static int offset_sourceId() {
         return (0 / 8);
     }
 
     /**
      * Return the offset (in bits) of the field 'stolenId'
      */
-    public static int offsetBits_stolenId() {
+    public static int offsetBits_sourceId() {
         return 0;
     }
 
     /**
      * Return the value (as a int) of the field 'stolenId'
      */
-    public int get_stolenId() {
-        return (int)getUIntBEElement(offsetBits_stolenId(), 16);
+    public int get_sourceId() {
+        return (int)getUIntBEElement(offsetBits_sourceId(), 16);
     }
 
     /**
      * Set the value of the field 'stolenId'
      */
-    public void set_stolenId(int value) {
-        setUIntBEElement(offsetBits_stolenId(), 16, value);
+    public void set_sourceId(int value) {
+        setUIntBEElement(offsetBits_sourceId(), 16, value);
     }
 
     /**
      * Return the size, in bytes, of the field 'stolenId'
      */
-    public static int size_stolenId() {
+    public static int size_sourceId() {
         return (16 / 8);
     }
 
     /**
      * Return the size, in bits, of the field 'stolenId'
      */
-    public static int sizeBits_stolenId() {
+    public static int sizeBits_sourceId() {
         return 16;
     }
 
