@@ -74,9 +74,6 @@ implementation
   AntiTheftC.TheftSend -> SendTheft;
   AntiTheftC.TheftReceive -> ReceiveTheft;
 
-  AntiTheftC.CtpInfo -> Ctp;
-  AntiTheftC.LinkEstimator -> Ctp;
-
   components RandomC;
   AntiTheftC.Random -> RandomC;
 }
