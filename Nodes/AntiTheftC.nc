@@ -122,32 +122,39 @@ event void ReadVoltage.readDone( error_t result, uint16_t val ){
 
   event message_t *TheftReceive.receive(message_t* msg, void* payload, uint8_t len) {
 
-	// whoops - this is the raw message. it is not in a nice readable packet. 
-	// this area needs to be cleaned up. With event message_t we are receiving the raw packet, we need to read the
-	// data is clearer terms, for example the alertId is the source node. Need to extract this from packet. 
 
-    	//settingsLed(); /* we will leave this on so that we can tell when the nodes are sending/receiving messages */
-
-	// we will have to break this packet down byte by byte and read the values from it
-
-
-	//const alert_t *receivedAlert = call AlertValue.get();
+	alert_t *newPacket = call AlertRoot.getPayload(&msg, sizeof(alert_t));
 
 
     	/* if this message from a blacklist node? If so, drop packet & flash red */
-	
-    		//if (receivedAlert->stolenId == blackListId) {
-			// flash red led, and drop the packet (do not return)
-		//	redLed();
+	if (newPacket->stolenId == blackListId || 
+			newPacket->path1 == blackListId ||
+			newPacket->path2 == blackListId ||
+			newPacket->path3 == blackListId ||
+			newPacket->path4 == blackListId ||
+			newPacket->path5 == blackListId ||
+			newPacket->path6 == blackListId	
+			) {
+		// flash red led, and drop the packet (do not return)
+		redLed();
 
-    		//} 
+	} 
 	
 	
-    	//else {
-	//	return msg;
-    	//}
+    	else {
+		// should indicate when the path (route) is full
+
+		newPacket->path6 = newPacket->path5;
+		newPacket->path5 = newPacket->path4;
+		newPacket->path4 = newPacket->path3;
+		newPacket->path3 = newPacket->path2;
+		newPacket->path2 = newPacket->path1;
+		newPacket->path1 = TOS_NODE_ID;
+		
+		return msg;
+    	}
 	
-	return msg;
+	// return msg;
     
     
   }
