@@ -30,7 +30,7 @@ enum {
   AM_THEFT = 99,
   AM_ALERT = 22,
   DIS_SETTINGS = 42,
-  COL_ALERTS = 12,
+  COL_ALERTS = 23,
 
   DEFAULT_ALERT = ALERT_LEDS,
   DEFAULT_DETECT = DETECT_DARK,
@@ -47,10 +47,7 @@ typedef nx_struct settings {
 typedef nx_struct alert {
 
   // stolenId is the origin of the message
-  nx_uint16_t stolenId; 
-  nx_uint16_t voltageData, eventId, parentId, linkQuality, path1, path2, path3, path4, path5, path6;
-  nx_uint8_t neighbors;
-
+  nx_uint16_t sourceId, voltageData, eventId, path1, path2, path3, path4, path5, path6;
  
   
 } alert_t;
