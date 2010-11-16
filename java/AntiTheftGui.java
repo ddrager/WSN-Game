@@ -236,23 +236,26 @@ public class AntiTheftGui implements MessageListener, Messenger {
     public void messageReceived(int dest_addr, Message msg) {
 	if (msg instanceof AlertMsg) {
 	    AlertMsg alertMsg = (AlertMsg)msg;
-	    int theMoteID = alertMsg.get_stolenId();
+	    int theMoteID = alertMsg.get_sourceId();
 	    int messageId = alertMsg.get_eventId();
-	    int parentId = alertMsg.get_parentId();
-            int linkQuality = alertMsg.get_linkQuality();
-	    int neighbors = alertMsg.get_neighbors();
+	    int path1 = alertMsg.get_path1();
+            int path2 = alertMsg.get_path2();
+	    int path3 = alertMsg.get_path3();
+	    int path4 = alertMsg.get_path4();
+	    int path5 = alertMsg.get_path5();
+	    int path6 = alertMsg.get_path6();
             long epoch = System.currentTimeMillis()/1000;
 	    float rawVoltage = alertMsg.get_voltageData();
 	    double preciseVoltage = (1252.352)/(rawVoltage);
 	    if (preciseVoltage > 500) {
 
-		message(epoch + " Node: " + alertMsg.get_stolenId() + " Voltage: Out of Bounds" );
+		message(epoch + " Node: " + alertMsg.get_sourceId() + " Voltage: Out of Bounds" );
 	    }
             else {
 	        DecimalFormat threeDForm = new DecimalFormat("#.######");
 	        double friendlyVoltage = Double.valueOf(threeDForm.format(preciseVoltage));	    
-	        message(epoch + " Node: " + theMoteID + " Voltage: " + friendlyVoltage + " EventId: " + messageId + " Parent: " + parentId + " Link Quality: " + linkQuality + " # Neighbors: " + neighbors);
-                String fileName = "mote_" + alertMsg.get_stolenId() + ".csv";
+	        message(epoch + " Node: " + theMoteID + " Voltage: " + friendlyVoltage + " EventId: " + messageId + " Path1: " + path1 + " Path2: " + path2 + " Path3: " + path3 + " Path4: " + path4 + " Path5: " + path5 + " Path6: " + path6);
+                String fileName = "mote_" + alertMsg.get_sourceId() + ".csv";
 		try {
 			BufferedWriter out = new BufferedWriter(new FileWriter(fileName, true));
 			out.write(epoch + "," + friendlyVoltage + "\n");
