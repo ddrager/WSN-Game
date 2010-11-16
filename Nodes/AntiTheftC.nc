@@ -34,10 +34,6 @@ module AntiTheftC
     interface AMSend as TheftSend;
     interface Receive as TheftReceive;
 
-    // Add these to get routing information 
-    interface CtpInfo;
-    interface LinkEstimator;
-
     interface Random;
   }
 }
@@ -109,52 +105,76 @@ event void ReadVoltage.readDone( error_t result, uint16_t val ){
 		newAlert->voltageData = val;
 		newAlert->eventId = eventId;
 		eventId = eventId + 1;
+		newAlert->path1 = TOS_NODE_ID;
+		newAlert->path2 = 999;
+		newAlert->path3 = 999;
+		newAlert->path4 = 999;
+		newAlert->path5 = 999;
+		newAlert->path6 = 999;
+
 	}
 } 
 
   /* We have nothing to do after messages are sent */
-  event void AlertRoot.sendDone(message_t *msg, error_t ok) { }
-  event void TheftSend.sendDone(message_t *msg, error_t ok) { }
+  event void AlertRoot.sendDone(message_t *msg, error_t ok) { 
 
-  /* We've received a theft alert from a neighbour. Turn on the theft warning
-     light! */
+	
+  }
+  event void TheftSend.sendDone(message_t *msg, error_t ok) { 
+
+
+
+}
 
 
   event message_t *TheftReceive.receive(message_t* msg, void* payload, uint8_t len) {
 
 
-	alert_t *newPacket = call AlertRoot.getPayload(&msg, sizeof(alert_t));
+
+        alert_t *newPacket = call AlertRoot.getPayload(&msg, sizeof(alert_t));
 
 
     	/* if this message from a blacklist node? If so, drop packet & flash red */
-	if (newPacket->stolenId == blackListId || 
-			newPacket->path1 == blackListId ||
-			newPacket->path2 == blackListId ||
-			newPacket->path3 == blackListId ||
-			newPacket->path4 == blackListId ||
-			newPacket->path5 == blackListId ||
-			newPacket->path6 == blackListId	
-			) {
-		// flash red led, and drop the packet (do not return)
-		redLed();
 
-	} 
-	
-	
-    	else {
-		// should indicate when the path (route) is full
+	if (newPacket != NULL) {
+		if (newPacket->sourceId == blackListId || 
+				newPacket->path1 == blackListId ||
+				newPacket->path2 == blackListId ||
+				newPacket->path3 == blackListId ||
+				newPacket->path4 == blackListId ||
+				newPacket->path5 == blackListId ||
+				newPacket->path6 == blackListId	
+				) {
+			// flash red led, and drop the packet (do not return)
+			redLed();
 
-		newPacket->path6 = newPacket->path5;
-		newPacket->path5 = newPacket->path4;
-		newPacket->path4 = newPacket->path3;
-		newPacket->path3 = newPacket->path2;
-		newPacket->path2 = newPacket->path1;
-		newPacket->path1 = TOS_NODE_ID;
-		
-		return msg;
-    	}
+		} 
 	
-	// return msg;
+		/* Drop packet if we were already found in the path */ 
+		else if (newPacket->path1 == TOS_NODE_ID ||
+			newPacket->path2 == TOS_NODE_ID ||
+			newPacket->path3 == TOS_NODE_ID ||
+			newPacket->path4 == TOS_NODE_ID ||
+			newPacket->path5 == TOS_NODE_ID ||
+			newPacket->path6 == TOS_NODE_ID){ }
+
+		/* Otherwise, add our path to the packet and forward on */
+	    	else {
+			// should check to see if the path (route) is full
+
+			newPacket->path6 = newPacket->path5;
+			newPacket->path5 = newPacket->path4;
+			newPacket->path4 = newPacket->path3;
+			newPacket->path3 = newPacket->path2;
+			newPacket->path2 = newPacket->path1;
+			newPacket->path1 = TOS_NODE_ID;
+			call AlertRoot.send(&newPacket, sizeof *newPacket);
+			return msg;
+	    	}
+
+	}
+	
+	//return msg;
     
     
   }
@@ -187,7 +207,6 @@ event void RadioControl.stopDone(error_t ok) { }
 /* New settings received, update our local copy */
 event void SettingsValue.changed() {
     const settings_t *newSettings = call SettingsValue.get();
-    uint16_t networkval = 0;
     
     settings = *newSettings;
     /* Switch to the new check interval */
@@ -207,20 +226,6 @@ event void SettingsValue.changed() {
 			// work on one blacklist ID at a time, for now.
 			blackListId = newSettings->ignoreId;
 
-			
-			call CtpInfo.getParent(&networkval);
-
-			if (blackListId == (int)networkval) {
-				if (call CtpInfo.setECNOff(FALSE)) {
-					//indicate we are reconfiguring route, we'll flash the orange LED to show we've done this
-					orangeLed();
-				}
-				call CtpInfo.setNeighborCongested(networkval, TRUE);
-				call CtpInfo.triggerImmediateRouteUpdate();
-				call CtpInfo.recomputeRoutes();
-
-				
-			}
 		}
 
      }
@@ -231,17 +236,7 @@ event void SettingsValue.changed() {
  * settings */
 event void Check.fired() {
 	greenLed();
-
-	if (settings.detect & DETECT_DARK)
-		call Read.read(); /* Initiate light sensor read */
-	if (settings.detect & DETECT_ACCEL)
-	{
-		/* To sample acceleration, we first register our buffer
-		   (postBuffer). Then we trigger sampling at the desired
-		   interval (read) */
-		call ReadStream.postBuffer(accelSamples, ACCEL_SAMPLES);
-		call ReadStream.read(ACCEL_INTERVAL);
-	}
+	call Read.read();
 }
 
 
@@ -263,36 +258,27 @@ void randomGenerator() {
 
 	alert_t *newAlert = call AlertRoot.getPayload(&alertMsg, sizeof(alert_t));
 
-	uint16_t networkval = 0;
-	//if (settings.alert & ALERT_LEDS)
-	//	 theftLed();
-	if (settings.alert & ALERT_SOUND)
-		call Mts300Sounder.beep(100);
 
 	// Let's use up some CPU to drain battery life
 
 	randomGenerator();
-	
+
 
 	if (newAlert != NULL) {
-		newAlert->stolenId = TOS_NODE_ID;
+		newAlert->sourceId = TOS_NODE_ID;
 		newAlert->eventId = eventId;
 
-		call CtpInfo.getParent(&networkval);
-		newAlert->parentId = networkval;
-		newAlert->linkQuality = call LinkEstimator.getLinkQuality(newAlert->parentId);
-		newAlert->neighbors = call CtpInfo.numNeighbors();
 
 		call ReadVoltage.read(); 
 		ledTime = WARNING_TIME;
-
+		orangeLed();
 		// Attempt to send the alert
 		check(call AlertRoot.send(&alertMsg, sizeof *newAlert));
+
+		//call TheftSend.send(AM_BROADCAST_ADDR, &newAlert, sizeof *newAlert);
 	}
       
   }
-
-event void LinkEstimator.evicted(am_addr_t addr){ }
 
 
   event void ReadStream.readDone(error_t ok, uint32_t usActualPeriod) { }
