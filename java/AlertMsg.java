@@ -85,22 +85,13 @@ public class AlertMsg extends net.tinyos.message.Message {
     public String toString() {
       String s = "Message <AlertMsg> \n";
       try {
-        s += "  [stolenId=0x"+Long.toHexString(get_stolenId())+"]\n";
+        s += "  [sourceId=0x"+Long.toHexString(get_stolenId())+"]\n";
       } catch (ArrayIndexOutOfBoundsException aioobe) { /* Skip field */ }
       try {
         s += "  [voltageData=0x"+Long.toHexString(get_voltageData())+"]\n";
       } catch (ArrayIndexOutOfBoundsException aioobe) { /* Skip field */ }
       try {
         s += "  [eventId=0x"+Long.toHexString(get_eventId())+"]\n";
-      } catch (ArrayIndexOutOfBoundsException aioobe) { /* Skip field */ }
-      try {
-        s += "  [parentId=0x"+Long.toHexString(get_parentId())+"]\n";
-      } catch (ArrayIndexOutOfBoundsException aioobe) { /* Skip field */ }
-      try {
-        s += "  [linkQuality=0x"+Long.toHexString(get_linkQuality())+"]\n";
-      } catch (ArrayIndexOutOfBoundsException aioobe) { /* Skip field */ }
-      try {
-        s += "  [neighbors=0x"+Long.toHexString(get_neighbors())+"]\n";
       } catch (ArrayIndexOutOfBoundsException aioobe) { /* Skip field */ }
       try {
         s += "  [path1=0x"+Long.toHexString(get_path1())+"]\n";
@@ -314,293 +305,383 @@ public class AlertMsg extends net.tinyos.message.Message {
         return 16;
     }
 
+
     /////////////////////////////////////////////////////////
-    // Accessor methods for field: parentId
+    // Accessor methods for field: path1
     //   Field type: int, unsigned
     //   Offset (bits): 48
     //   Size (bits): 16
     /////////////////////////////////////////////////////////
 
     /**
-     * Return whether the field 'parentId' is signed (false).
+     * Return whether the field 'path1' is signed (false).
      */
-    public static boolean isSigned_parentId() {
+    public static boolean isSigned_path1() {
         return false;
     }
 
     /**
-     * Return whether the field 'parentId' is an array (false).
+     * Return whether the field 'path1' is an array (false).
      */
-    public static boolean isArray_parentId() {
+    public static boolean isArray_path1() {
         return false;
     }
 
     /**
-     * Return the offset (in bytes) of the field 'parentId'
+     * Return the offset (in bytes) of the field 'path1'
      */
-    public static int offset_parentId() {
+    public static int offset_path1() {
         return (48 / 8);
     }
 
     /**
-     * Return the offset (in bits) of the field 'parentId'
+     * Return the offset (in bits) of the field 'path1'
      */
-    public static int offsetBits_parentId() {
+    public static int offsetBits_path1() {
         return 48;
     }
 
     /**
-     * Return the value (as a int) of the field 'parentId'
+     * Return the value (as a int) of the field 'path1'
      */
-    public int get_parentId() {
-        return (int)getUIntBEElement(offsetBits_parentId(), 16);
+    public int get_path1() {
+        return (int)getUIntBEElement(offsetBits_path1(), 16);
     }
 
     /**
-     * Set the value of the field 'parentId'
+     * Set the value of the field 'path1'
      */
-    public void set_parentId(int value) {
-        setUIntBEElement(offsetBits_parentId(), 16, value);
+    public void set_path1(int value) {
+        setUIntBEElement(offsetBits_path1(), 16, value);
     }
 
     /**
-     * Return the size, in bytes, of the field 'parentId'
+     * Return the size, in bytes, of the field 'path1'
      */
-    public static int size_parentId() {
+    public static int size_path1() {
         return (16 / 8);
     }
 
     /**
-     * Return the size, in bits, of the field 'parentId'
+     * Return the size, in bits, of the field 'path1'
      */
-    public static int sizeBits_parentId() {
+    public static int sizeBits_path1() {
         return 16;
     }
 
     /////////////////////////////////////////////////////////
-    // Accessor methods for field: linkQuality
+    // Accessor methods for field: path2
     //   Field type: int, unsigned
     //   Offset (bits): 64
     //   Size (bits): 16
     /////////////////////////////////////////////////////////
 
     /**
-     * Return whether the field 'linkQuality' is signed (false).
+     * Return whether the field 'path2' is signed (false).
      */
-    public static boolean isSigned_linkQuality() {
+    public static boolean isSigned_path2() {
         return false;
     }
 
     /**
-     * Return whether the field 'linkQuality' is an array (false).
+     * Return whether the field 'path2' is an array (false).
      */
-    public static boolean isArray_linkQuality() {
+    public static boolean isArray_path2() {
         return false;
     }
 
     /**
-     * Return the offset (in bytes) of the field 'linkQuality'
+     * Return the offset (in bytes) of the field 'path2'
      */
-    public static int offset_linkQuality() {
+    public static int offset_path2() {
         return (64 / 8);
     }
 
     /**
-     * Return the offset (in bits) of the field 'linkQuality'
+     * Return the offset (in bits) of the field 'path2'
      */
-    public static int offsetBits_linkQuality() {
+    public static int offsetBits_path2() {
         return 64;
     }
 
     /**
-     * Return the value (as a int) of the field 'linkQuality'
+     * Return the value (as a int) of the field 'path2'
      */
-    public int get_linkQuality() {
-        return (int)getUIntBEElement(offsetBits_linkQuality(), 16);
+    public int get_path2() {
+        return (int)getUIntBEElement(offsetBits_path2(), 16);
     }
 
     /**
-     * Set the value of the field 'linkQuality'
+     * Set the value of the field 'path2'
      */
-    public void set_linkQuality(int value) {
-        setUIntBEElement(offsetBits_linkQuality(), 16, value);
+    public void set_path2(int value) {
+        setUIntBEElement(offsetBits_path2(), 16, value);
     }
 
     /**
-     * Return the size, in bytes, of the field 'linkQuality'
+     * Return the size, in bytes, of the field 'path2'
      */
-    public static int size_linkQuality() {
+    public static int size_path2() {
         return (16 / 8);
     }
 
     /**
-     * Return the size, in bits, of the field 'linkQuality'
+     * Return the size, in bits, of the field 'path2'
      */
-    public static int sizeBits_linkQuality() {
+    public static int sizeBits_path2() {
         return 16;
     }
 
     /////////////////////////////////////////////////////////
-    // Accessor methods for field: neighbors
-    //   Field type: short, unsigned
+    // Accessor methods for field: path3
+    //   Field type: int, unsigned
     //   Offset (bits): 80
-    //   Size (bits): 8
+    //   Size (bits): 16
     /////////////////////////////////////////////////////////
 
     /**
-     * Return whether the field 'neighbors' is signed (false).
+     * Return whether the field 'path3' is signed (false).
      */
-    public static boolean isSigned_neighbors() {
+    public static boolean isSigned_path3() {
         return false;
     }
 
     /**
-     * Return whether the field 'neighbors' is an array (false).
+     * Return whether the field 'path3' is an array (false).
      */
-    public static boolean isArray_neighbors() {
+    public static boolean isArray_path3() {
         return false;
     }
 
     /**
-     * Return the offset (in bytes) of the field 'neighbors'
+     * Return the offset (in bytes) of the field 'path3'
      */
-    public static int offset_neighbors() {
+    public static int offset_path3() {
         return (80 / 8);
     }
 
     /**
-     * Return the offset (in bits) of the field 'neighbors'
+     * Return the offset (in bits) of the field 'path3'
      */
-    public static int offsetBits_neighbors() {
+    public static int offsetBits_path3() {
         return 80;
     }
 
     /**
-     * Return the value (as a short) of the field 'neighbors'
+     * Return the value (as a int) of the field 'path3'
      */
-    public short get_neighbors() {
-        return (short)getUIntBEElement(offsetBits_neighbors(), 8);
+    public int get_path3() {
+        return (int)getUIntBEElement(offsetBits_path3(), 16);
     }
 
     /**
-     * Set the value of the field 'neighbors'
+     * Set the value of the field 'path3'
      */
-    public void set_neighbors(short value) {
-        setUIntBEElement(offsetBits_neighbors(), 8, value);
+    public void set_path3(int value) {
+        setUIntBEElement(offsetBits_path3(), 16, value);
     }
 
     /**
-     * Return the size, in bytes, of the field 'neighbors'
+     * Return the size, in bytes, of the field 'path3'
      */
-    public static int size_neighbors() {
-        return (8 / 8);
+    public static int size_path3() {
+        return (16 / 8);
     }
 
     /**
-     * Return the size, in bits, of the field 'neighbors'
+     * Return the size, in bits, of the field 'path3'
      */
-    public static int sizeBits_neighbors() {
-        return 8;
+    public static int sizeBits_path3() {
+        return 16;
     }
-
-
-    /////////////////////////////////////////////////////////
-    // Accessor methods for field: path1
-    //   Field type: int, unsigned
-    //   Offset (bits): 88
-    //   Size (bits): 16
-    /////////////////////////////////////////////////////////
-
-    public static boolean isSigned_path1() { return false; }
-    public static boolean isArray_path1() { return false; }
-    public static int offset_path1() { return (88 / 8); }
-    public static int offsetBits_path1() { return 88; }
-    public int get_path1() { return (int)getUIntBEElement(offsetBits_path1(), 16); }
-    public void set_path1(int value) { setUIntBEElement(offsetBits_path1(), 16, value); }
-    public static int size_path1() { return (16 / 8); }
-    public static int sizeBits_path1() { return 16; }
-
-    /////////////////////////////////////////////////////////
-    // Accessor methods for field: path2
-    //   Field type: int, unsigned
-    //   Offset (bits): 104
-    //   Size (bits): 16
-    /////////////////////////////////////////////////////////
-
-    public static boolean isSigned_path2() { return false; }
-    public static boolean isArray_path2() { return false; }
-    public static int offset_path2() { return (104 / 8); }
-    public static int offsetBits_path2() { return 104; }
-    public int get_path2() { return (int)getUIntBEElement(offsetBits_path2(), 16); }
-    public void set_path2(int value) { setUIntBEElement(offsetBits_path2(), 16, value); }
-    public static int size_path2() { return (16 / 8); }
-    public static int sizeBits_path2() { return 16; }
-
-    /////////////////////////////////////////////////////////
-    // Accessor methods for field: path3
-    //   Field type: int, unsigned
-    //   Offset (bits): 120
-    //   Size (bits): 16
-    /////////////////////////////////////////////////////////
-
-    public static boolean isSigned_path3() { return false; }
-    public static boolean isArray_path3() { return false; }
-    public static int offset_path3() { return (120 / 8); }
-    public static int offsetBits_path3() { return 120; }
-    public int get_path3() { return (int)getUIntBEElement(offsetBits_path3(), 16); }
-    public void set_path3(int value) { setUIntBEElement(offsetBits_path3(), 16, value); }
-    public static int size_path3() { return (16 / 8); }
-    public static int sizeBits_path3() { return 16; }
 
     /////////////////////////////////////////////////////////
     // Accessor methods for field: path4
     //   Field type: int, unsigned
-    //   Offset (bits): 136
+    //   Offset (bits): 96
     //   Size (bits): 16
     /////////////////////////////////////////////////////////
 
-    public static boolean isSigned_path4() { return false; }
-    public static boolean isArray_path4() { return false; }
-    public static int offset_path4() { return (136 / 8); }
-    public static int offsetBits_path4() { return 136; }
-    public int get_path4() { return (int)getUIntBEElement(offsetBits_path4(), 16); }
-    public void set_path4(int value) { setUIntBEElement(offsetBits_path4(), 16, value); }
-    public static int size_path4() { return (16 / 8); }
-    public static int sizeBits_path4() { return 16; }
+    /**
+     * Return whether the field 'path4' is signed (false).
+     */
+    public static boolean isSigned_path4() {
+        return false;
+    }
+
+    /**
+     * Return whether the field 'path4' is an array (false).
+     */
+    public static boolean isArray_path4() {
+        return false;
+    }
+
+    /**
+     * Return the offset (in bytes) of the field 'path4'
+     */
+    public static int offset_path4() {
+        return (96 / 8);
+    }
+
+    /**
+     * Return the offset (in bits) of the field 'path4'
+     */
+    public static int offsetBits_path4() {
+        return 96;
+    }
+
+    /**
+     * Return the value (as a int) of the field 'path4'
+     */
+    public int get_path4() {
+        return (int)getUIntBEElement(offsetBits_path4(), 16);
+    }
+
+    /**
+     * Set the value of the field 'path4'
+     */
+    public void set_path4(int value) {
+        setUIntBEElement(offsetBits_path4(), 16, value);
+    }
+
+    /**
+     * Return the size, in bytes, of the field 'path4'
+     */
+    public static int size_path4() {
+        return (16 / 8);
+    }
+
+    /**
+     * Return the size, in bits, of the field 'path4'
+     */
+    public static int sizeBits_path4() {
+        return 16;
+    }
 
     /////////////////////////////////////////////////////////
     // Accessor methods for field: path5
     //   Field type: int, unsigned
-    //   Offset (bits): 152
+    //   Offset (bits): 112
     //   Size (bits): 16
     /////////////////////////////////////////////////////////
 
-    public static boolean isSigned_path5() { return false; }
-    public static boolean isArray_path5() { return false; }
-    public static int offset_path5() { return (152 / 8); }
-    public static int offsetBits_path5() { return 152; }
-    public int get_path5() { return (int)getUIntBEElement(offsetBits_path5(), 16); }
-    public void set_path5(int value) { setUIntBEElement(offsetBits_path5(), 16, value); }
-    public static int size_path5() { return (16 / 8); }
-    public static int sizeBits_path5() { return 16; }
+    /**
+     * Return whether the field 'path5' is signed (false).
+     */
+    public static boolean isSigned_path5() {
+        return false;
+    }
+
+    /**
+     * Return whether the field 'path5' is an array (false).
+     */
+    public static boolean isArray_path5() {
+        return false;
+    }
+
+    /**
+     * Return the offset (in bytes) of the field 'path5'
+     */
+    public static int offset_path5() {
+        return (112 / 8);
+    }
+
+    /**
+     * Return the offset (in bits) of the field 'path5'
+     */
+    public static int offsetBits_path5() {
+        return 112;
+    }
+
+    /**
+     * Return the value (as a int) of the field 'path5'
+     */
+    public int get_path5() {
+        return (int)getUIntBEElement(offsetBits_path5(), 16);
+    }
+
+    /**
+     * Set the value of the field 'path5'
+     */
+    public void set_path5(int value) {
+        setUIntBEElement(offsetBits_path5(), 16, value);
+    }
+
+    /**
+     * Return the size, in bytes, of the field 'path5'
+     */
+    public static int size_path5() {
+        return (16 / 8);
+    }
+
+    /**
+     * Return the size, in bits, of the field 'path5'
+     */
+    public static int sizeBits_path5() {
+        return 16;
+    }
 
     /////////////////////////////////////////////////////////
-    // Accessor methods for field: path1
+    // Accessor methods for field: path6
     //   Field type: int, unsigned
-    //   Offset (bits): 168
+    //   Offset (bits): 128
     //   Size (bits): 16
     /////////////////////////////////////////////////////////
 
-    public static boolean isSigned_path6() { return false; }
-    public static boolean isArray_path6() { return false; }
-    public static int offset_path6() { return (168 / 8); }
-    public static int offsetBits_path6() { return 168; }
-    public int get_path6() { return (int)getUIntBEElement(offsetBits_path6(), 16); }
-    public void set_path6(int value) { setUIntBEElement(offsetBits_path6(), 16, value); }
-    public static int size_path6() { return (16 / 8); }
-    public static int sizeBits_path6() { return 16; }
+    /**
+     * Return whether the field 'path6' is signed (false).
+     */
+    public static boolean isSigned_path6() {
+        return false;
+    }
 
+    /**
+     * Return whether the field 'path6' is an array (false).
+     */
+    public static boolean isArray_path6() {
+        return false;
+    }
 
+    /**
+     * Return the offset (in bytes) of the field 'path6'
+     */
+    public static int offset_path6() {
+        return (128 / 8);
+    }
 
+    /**
+     * Return the offset (in bits) of the field 'path6'
+     */
+    public static int offsetBits_path6() {
+        return 128;
+    }
+
+    /**
+     * Return the value (as a int) of the field 'path6'
+     */
+    public int get_path6() {
+        return (int)getUIntBEElement(offsetBits_path6(), 16);
+    }
+
+    /**
+     * Set the value of the field 'path6'
+     */
+    public void set_path6(int value) {
+        setUIntBEElement(offsetBits_path6(), 16, value);
+    }
+
+    /**
+     * Return the size, in bytes, of the field 'path6'
+     */
+    public static int size_path6() {
+        return (16 / 8);
+    }
+
+    /**
+     * Return the size, in bits, of the field 'path6'
+     */
+    public static int sizeBits_path6() {
+        return 16;
+    }
 
 }
