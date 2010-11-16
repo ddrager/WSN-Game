@@ -48,7 +48,7 @@ typedef nx_struct alert {
 
   // stolenId is the origin of the message
   nx_uint16_t stolenId; 
-  nx_uint16_t voltageData, eventId, parentId, linkQuality;
+  nx_uint16_t voltageData, eventId, parentId, linkQuality, path1, path2, path3, path4, path5, path6;
   nx_uint8_t neighbors;
 
  
