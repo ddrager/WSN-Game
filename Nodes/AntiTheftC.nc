@@ -54,7 +54,8 @@ implementation
   };
 
   settings_t settings;
-  message_t alertMsg, theftMsg;
+  bool fwdBusy;
+  message_t alertMsg, theftMsg, fwdMsg, fwdAlert;
   uint16_t ledTime; /* Time left until leds switched off */
   uint16_t accelSamples[ACCEL_SAMPLES];
 
@@ -100,7 +101,8 @@ implementation
 
 /* After voltage is read, add to the packet */
 event void ReadVoltage.readDone( error_t result, uint16_t val ){ 
-	alert_t *newAlert = call AlertRoot.getPayload(&alertMsg, sizeof(alert_t));
+	alert_t *newAlert = call TheftSend.getPayload(&fwdMsg, sizeof(alert_t));
+	//alert_t *newAlert = call AlertRoot.getPayload(&alertMsg, sizeof(alert_t));
 	if (result == SUCCESS){ 
 		newAlert->voltageData = val;
 		newAlert->eventId = eventId;
@@ -120,18 +122,14 @@ event void ReadVoltage.readDone( error_t result, uint16_t val ){
 
 	
   }
-  event void TheftSend.sendDone(message_t *msg, error_t ok) { 
-
-
-
-}
 
 
   event message_t *TheftReceive.receive(message_t* msg, void* payload, uint8_t len) {
 
-
-
-        alert_t *newPacket = call AlertRoot.getPayload(&msg, sizeof(alert_t));
+        //alert_t *newPacket = call TheftSend.getPayload(&msg, sizeof(alert_t));
+	alert_t *newAlert = payload;
+	alert_t *newPacket = call TheftSend.getPayload(&fwdMsg, sizeof(alert_t));
+	*newPacket = *newAlert;
 
 
     	/* if this message from a blacklist node? If so, drop packet & flash red */
@@ -151,30 +149,31 @@ event void ReadVoltage.readDone( error_t result, uint16_t val ){
 		} 
 	
 		/* Drop packet if we were already found in the path */ 
-		else if (newPacket->path1 == TOS_NODE_ID ||
-			newPacket->path2 == TOS_NODE_ID ||
+		else if (newPacket->path2 == TOS_NODE_ID ||
 			newPacket->path3 == TOS_NODE_ID ||
 			newPacket->path4 == TOS_NODE_ID ||
 			newPacket->path5 == TOS_NODE_ID ||
-			newPacket->path6 == TOS_NODE_ID){ }
+			newPacket->path6 == TOS_NODE_ID){ 
+			greenLed();
+		}
 
 		/* Otherwise, add our path to the packet and forward on */
 	    	else {
 			// should check to see if the path (route) is full
-
+			orangeLed();
 			newPacket->path6 = newPacket->path5;
 			newPacket->path5 = newPacket->path4;
 			newPacket->path4 = newPacket->path3;
 			newPacket->path3 = newPacket->path2;
 			newPacket->path2 = newPacket->path1;
 			newPacket->path1 = TOS_NODE_ID;
-			call AlertRoot.send(&newPacket, sizeof *newPacket);
-			return msg;
+			//call AlertRoot.send(&newPacket, sizeof *newPacket);
+			check(call TheftSend.send(AM_BROADCAST_ADDR, &fwdMsg,  sizeof(alert_t)));
 	    	}
 
 	}
 	
-	//return msg;
+	return msg;
     
     
   }
@@ -198,8 +197,9 @@ event void ReadVoltage.readDone( error_t result, uint16_t val ){
 	call CollectionControl.start();
 	call LowPowerListening.setLocalWakeupInterval(512);
       }
-    else
-      redLed();
+    else {
+      //redLed();
+    }
   }
 
 event void RadioControl.stopDone(error_t ok) { }
@@ -220,7 +220,7 @@ event void SettingsValue.changed() {
 		//settingsLed();
 		if (newSettings->ignoreId == TOS_NODE_ID) {
 			// uh oh, we are the ones being blacklisted, turn on error LED
-			redLed();
+			//redLed();
 		}
 		else {
 			// work on one blacklist ID at a time, for now.
@@ -235,7 +235,7 @@ event void SettingsValue.changed() {
 /* Every check interval: update leds, check for theft based on current
  * settings */
 event void Check.fired() {
-	greenLed();
+	//greenLed();
 	call Read.read();
 }
 
@@ -256,8 +256,8 @@ void randomGenerator() {
    */
   event void Read.readDone(error_t ok, uint16_t val) {
 
-	alert_t *newAlert = call AlertRoot.getPayload(&alertMsg, sizeof(alert_t));
-
+	//alert_t *newAlert = call AlertRoot.getPayload(&alertMsg, sizeof(alert_t));
+	alert_t *newAlert = call TheftSend.getPayload(&fwdMsg, sizeof(alert_t));
 
 	// Let's use up some CPU to drain battery life
 
@@ -271,13 +271,19 @@ void randomGenerator() {
 
 		call ReadVoltage.read(); 
 		ledTime = WARNING_TIME;
-		orangeLed();
+		greenLed();
 		// Attempt to send the alert
-		check(call AlertRoot.send(&alertMsg, sizeof *newAlert));
+		//check(call AlertRoot.send(&alertMsg, sizeof *newAlert));
 
-		//call TheftSend.send(AM_BROADCAST_ADDR, &newAlert, sizeof *newAlert);
+		if(call TheftSend.send(AM_BROADCAST_ADDR, &fwdMsg, sizeof(alert_t)) == SUCCESS)
+			fwdBusy = TRUE;
 	}
       
+  }
+
+  event void TheftSend.sendDone(message_t *msg, error_t error)
+  {
+		fwdBusy = FALSE;
   }
 
 
