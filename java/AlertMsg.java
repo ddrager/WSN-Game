@@ -10,9 +10,9 @@ public class AlertMsg extends net.tinyos.message.Message {
     public static final int DEFAULT_MESSAGE_SIZE = 18;
 
     /** The Active Message type associated with this message. */
-    public static final int AM_TYPE = 22;
+    public static final int AM_TYPE = 99;
 
-    /** Create a new AlertMsg of size 23. */
+    /** Create a new AlertMsg of size 18. */
     public AlertMsg() {
         super(DEFAULT_MESSAGE_SIZE);
         amTypeSet(AM_TYPE);
@@ -117,63 +117,63 @@ public class AlertMsg extends net.tinyos.message.Message {
     // Message-type-specific access methods appear below.
 
     /////////////////////////////////////////////////////////
-    // Accessor methods for field: stolenId
+    // Accessor methods for field: sourceId
     //   Field type: int, unsigned
     //   Offset (bits): 0
     //   Size (bits): 16
     /////////////////////////////////////////////////////////
 
     /**
-     * Return whether the field 'stolenId' is signed (false).
+     * Return whether the field 'sourceId' is signed (false).
      */
     public static boolean isSigned_sourceId() {
         return false;
     }
 
     /**
-     * Return whether the field 'stolenId' is an array (false).
+     * Return whether the field 'sourceId' is an array (false).
      */
     public static boolean isArray_sourceId() {
         return false;
     }
 
     /**
-     * Return the offset (in bytes) of the field 'stolenId'
+     * Return the offset (in bytes) of the field 'sourceId'
      */
     public static int offset_sourceId() {
         return (0 / 8);
     }
 
     /**
-     * Return the offset (in bits) of the field 'stolenId'
+     * Return the offset (in bits) of the field 'sourceId'
      */
     public static int offsetBits_sourceId() {
         return 0;
     }
 
     /**
-     * Return the value (as a int) of the field 'stolenId'
+     * Return the value (as a int) of the field 'sourceId'
      */
     public int get_sourceId() {
         return (int)getUIntBEElement(offsetBits_sourceId(), 16);
     }
 
     /**
-     * Set the value of the field 'stolenId'
+     * Set the value of the field 'sourceId'
      */
     public void set_sourceId(int value) {
         setUIntBEElement(offsetBits_sourceId(), 16, value);
     }
 
     /**
-     * Return the size, in bytes, of the field 'stolenId'
+     * Return the size, in bytes, of the field 'sourceId'
      */
     public static int size_sourceId() {
         return (16 / 8);
     }
 
     /**
-     * Return the size, in bits, of the field 'stolenId'
+     * Return the size, in bits, of the field 'sourceId'
      */
     public static int sizeBits_sourceId() {
         return 16;
@@ -304,7 +304,6 @@ public class AlertMsg extends net.tinyos.message.Message {
     public static int sizeBits_eventId() {
         return 16;
     }
-
 
     /////////////////////////////////////////////////////////
     // Accessor methods for field: path1
