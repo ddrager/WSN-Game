@@ -31,8 +31,10 @@ module AntiTheftRootC
     interface StdControl as CollectionControl;
     interface StdControl as DisseminationControl;
     interface RootControl;
-    interface Receive as AlertsReceive;
+    
     interface AMSend as AlertsForward;
+
+    interface Receive as TheftReceive;
 
     interface Leds;
   }
@@ -82,8 +84,7 @@ implementation
 
   /* When we (as root of the collection tree) receive a new theft alert,
      we forward it to the PC via the serial port */
-  event message_t *AlertsReceive.receive(message_t* msg, void* payload, 
-					 uint8_t len)
+  event message_t *TheftReceive.receive(message_t* msg, void* payload, uint8_t len)
   {
     alert_t *newAlert = payload;
 
@@ -102,7 +103,6 @@ implementation
       }
     return msg;
   }
-
   event void AlertsForward.sendDone(message_t *msg, error_t error) {
     if (msg == &fwdMsg)
       fwdBusy = FALSE;
