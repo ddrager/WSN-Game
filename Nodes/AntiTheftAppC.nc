@@ -63,6 +63,8 @@ implementation
   /* Instantiate and wire our collection service for theft alerts */
   components CollectionC, new CollectionSenderC(COL_ALERTS) as AlertSender;
 
+
+  // AlertRoot uses CollectionC as protocol
   AntiTheftC.AlertRoot -> AlertSender;
   AntiTheftC.CollectionControl -> CollectionC;
 
@@ -71,6 +73,7 @@ implementation
   components new AMSenderC(AM_THEFT) as SendTheft, 
     new AMReceiverC(AM_THEFT) as ReceiveTheft;
 
+  // TheftSend uses AMSenderC
   AntiTheftC.TheftSend -> SendTheft;
   AntiTheftC.TheftReceive -> ReceiveTheft;
 
