@@ -15,7 +15,7 @@ public class Constants  {
     public static final byte DEFAULT_DETECT = 1;
     public static final byte AM_THEFT = 99;
     public static final byte AM_SETTINGS = 54;
-    public static final byte COL_ALERTS = 12;
+    public static final byte COL_ALERTS = 26;
     public static final byte AM_ALERT = 22;
     public static final byte DEFAULT_ALERT = 1;
     public static final byte ALERT_ROOT = 1;
